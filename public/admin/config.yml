@@ -1,0 +1,241 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+# Admin panel (Sveltia CMS) at /admin/. Every Save is a commit to GitHub; GitHub Actions then rebuilds the site
+# with build.py, and the change is live in 1–2 minutes. Sign in with a GitHub token: see README.md.
+
+backend:
+  name: github
+  repo: kulikovpage/kulikovpage.github.io
+  branch: main
+  commit_messages:
+    create: "Add {{collection}} “{{slug}}”"
+    update: "Update {{collection}} “{{slug}}”"
+    delete: "Delete {{collection}} “{{slug}}”"
+    uploadMedia: "Upload “{{path}}”"
+    deleteMedia: "Delete “{{path}}”"
+
+site_url: https://kulikovpage.github.io
+display_url: https://kulikovpage.github.io
+logo:
+  src: /assets/favicon.svg
+
+media_folder: public/uploads
+public_folder: /uploads
+media_libraries:
+  default:
+    config:
+      max_file_size: 15000000
+      # Uploaded pictures are converted to WebP and scaled down in the browser before they are saved.
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 1800
+          height: 1800
+
+i18n:
+  structure: single_file
+  locales: [en, uk, ru, pl, es, fr, pt]
+  default_locale: en
+  # A new project starts in English only; other languages are switched on in the ⋮ menu of the editor.
+  initial_locales: default
+
+collections:
+  - name: projects
+    label: Projects
+    label_singular: Project
+    description: >-
+      Each project gets a card on the home page, its own page at /name/ and a privacy policy at /name/privacy/.
+      Fields left empty in a translation show the English text.
+    icon: apps
+    folder: content/projects
+    format: json
+    extension: json
+    create: true
+    delete: true
+    identifier_field: title
+    slug: "{{title}}"
+    summary: "{{title}} · {{status}}"
+    sortable_fields: [order, title]
+    thumbnail: icon
+    preview_path: "{{slug}}/"
+    editor:
+      preview: false
+    i18n: true
+    fields:
+      - name: title
+        label: App name
+        widget: string
+        hint: The page address is made from it, e.g. “Note Vault” → /note-vault/.
+
+      - name: subtitle
+        label: One-line description
+        widget: string
+        i18n: true
+        hint: Shown on the card and under the name, about 30–60 characters.
+
+      - name: status
+        label: Status
+        widget: select
+        default: soon
+        options:
+          - { label: On the App Store, value: available }
+          - { label: Coming soon, value: soon }
+          - { label: Beta (TestFlight), value: beta }
+        hint: “On the App Store” shows the App Store button, “Beta” the TestFlight button.
+
+      - name: app_store_url
+        label: App Store link
+        widget: string
+        required: false
+        pattern: ['^https://', 'The link must start with https://']
+        hint: For example https://apps.apple.com/app/id1234567890 (the number is the Apple ID in App Store Connect → App Information).
+
+      - name: testflight_url
+        label: TestFlight link
+        widget: string
+        required: false
+        pattern: ['^https://', 'The link must start with https://']
+
+      - name: icon
+        label: App icon
+        widget: image
+        required: false
+        hint: Square, 1024 × 1024 is best. The corners are rounded on the site.
+
+      - name: color
+        label: Project colour
+        widget: color
+        default: "#5B5FC7"
+        hint: Used for the card, buttons and accents. Text on buttons turns black or white by itself.
+
+      - name: platforms
+        label: Platforms
+        widget: select
+        multiple: true
+        required: false
+        default: [iPhone]
+        options: [iPhone, iPad, Apple Watch, Mac, Apple TV, Apple Vision Pro, Android, Web]
+
+      - name: cover
+        label: Cover picture
+        widget: image
+        required: false
+        i18n: true
+        hint: A wide picture (about 2:1) for the card and the top of the page. Optional. Each language can have its own.
+
+      - name: screenshots
+        label: Screenshots
+        widget: image
+        multiple: true
+        required: false
+        i18n: true
+        hint: Portrait iPhone screenshots, in the order to show. Each language can have its own; empty means the English ones.
+
+      - name: description
+        label: About the app
+        widget: markdown
+        required: false
+        i18n: true
+        hint: One or two short paragraphs.
+
+      - name: features
+        label: Features
+        widget: list
+        required: false
+        i18n: true
+        summary: "{{fields.title}}"
+        hint: 3–6 items work best.
+        fields:
+          - { name: title, label: Title, widget: string, i18n: true }
+          - { name: text, label: Text, widget: text, required: false, i18n: true }
+
+      - name: help
+        label: Help & FAQ
+        widget: list
+        required: false
+        i18n: true
+        summary: "{{fields.question}}"
+        fields:
+          - { name: question, label: Question or topic, widget: string, i18n: true }
+          - { name: answer, label: Answer, widget: markdown, i18n: true }
+
+      - name: support_email
+        label: Support email
+        widget: string
+        required: false
+        hint: Leave empty to use the email from Site settings.
+
+      - name: privacy
+        label: Privacy policy
+        widget: markdown
+        required: false
+        i18n: true
+        hint: Starts as a template for an app that collects no data. Replace APP NAME and EMAIL, and check every line against what the app really does.
+        default: |-
+          ## In short
+
+          APP NAME collects no personal data. No account, no ads, no analytics, no tracking.
+
+          ## Your data
+
+          Your settings and progress are stored on your device. Deleting the app deletes them.
+
+          ## Purchases
+
+          Optional purchases are processed by Apple through the App Store. We never receive your name, email or payment details.
+
+          ## Crash reports
+
+          If you have chosen in iOS Settings to share analytics with app developers, Apple may send us anonymous crash and performance reports. They contain no personal information.
+
+          ## Children
+
+          The app is suitable for all ages and collects no data from anyone, including children.
+
+          ## Changes
+
+          If this policy changes, we will update this page and the date above.
+
+          ## Contact
+
+          Questions? Write to [EMAIL](mailto:EMAIL).
+
+      - name: privacy_updated
+        label: Privacy policy date
+        widget: datetime
+        required: false
+        time_format: false
+        date_format: YYYY-MM-DD
+        format: YYYY-MM-DD
+        hint: Update it whenever the policy changes.
+
+      - name: order
+        label: Position on the home page
+        widget: number
+        value_type: int
+        default: 10
+        hint: Smaller numbers come first.
+
+      - name: hidden
+        label: Hide from the site
+        widget: boolean
+        default: false
+        hint: Keeps the project as a draft. Its pages are not published.
+
+  - name: settings
+    label: Site settings
+    icon: settings
+    editor:
+      preview: false
+    files:
+      - name: site
+        label: Home page and contacts
+        file: content/site.json
+        format: json
+        fields:
+          - { name: name, label: Site name, widget: string, hint: Shown at the top of every page and in the browser tab. }
+          - { name: headline, label: Headline, widget: string, hint: The big line on the home page. Short is better. }
+          - { name: intro, label: Intro, widget: text, hint: One or two sentences under the headline. }
+          - { name: email, label: Contact email, widget: string, hint: Shown in the footer and on project pages. }
+          - { name: url, label: Site address, widget: string, hint: "Change it when the domain is connected, e.g. https://kulikov.app" }
+          - { name: footer, label: Footer note, widget: string, required: false }
