@@ -75,7 +75,8 @@ p { margin: 0; }
     radial-gradient(30% 45% at 92% 75%, color-mix(in srgb, var(--glow2, #2fa59a) 40%, transparent), transparent 70%),
     radial-gradient(28% 40% at 60% 85%, color-mix(in srgb, var(--glow3, #e0904d) 30%, transparent), transparent 70%);
 }
-.hero h1 { font-size: clamp(40px, 6.4vw, 80px); font-weight: 700; max-width: 17ch; }
+.hero h1 { font-size: clamp(36px, 9vw, 52px); font-weight: 700; text-wrap: balance; }
+@media (min-width: 760px) { .hero h1 { font-size: min(4.9vw, 62px); white-space: nowrap; } }
 .lead { color: var(--muted); font-size: clamp(18px, 1.6vw, 21px); line-height: 1.5; max-width: 40ch; margin-top: 20px; }
 
 .projects { padding-bottom: 0; }

@@ -306,14 +306,16 @@ def home(site, projects):
 
 def project_page(site, p):
     email = p.email or site.get("email") or ""
-    if p.status == "available" and p.app_store_url:
-        cta = '<a class="button" href="%s" rel="noopener">View on the App Store <span aria-hidden="true">↗</span></a>' \
-              % esc(p.app_store_url)
-    elif p.status == "beta" and p.testflight_url:
-        cta = '<a class="button" href="%s" rel="noopener">Join the beta <span aria-hidden="true">↗</span></a>' \
-              % esc(p.testflight_url)
-    else:
-        cta = '<span class="pill">%s</span>' % ("In beta" if p.status == "beta" else "Coming soon to the App Store")
+    # The App Store button shows whenever there is a link; the status adds a note next to it.
+    cta = ""
+    if p.app_store_url:
+        cta += '<a class="button" href="%s" rel="noopener">View on the App Store <span aria-hidden="true">↗</span></a>' \
+               % esc(p.app_store_url)
+    if p.status == "beta" and p.testflight_url:
+        cta += '<a class="button button-quiet" href="%s" rel="noopener">Join the beta <span aria-hidden="true">↗</span></a>' \
+               % esc(p.testflight_url)
+    if p.status != "available":
+        cta += '<span class="pill">%s</span>' % ("In beta" if p.status == "beta" else "Coming soon")
     icon = '<img class="p-icon" src="%s" alt="" width="112" height="112">' % esc(p.icon) if p.icon else ""
 
     sections = []

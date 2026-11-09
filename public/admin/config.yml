@@ -72,7 +72,7 @@ collections:
           - { label: On the App Store, value: available }
           - { label: Coming soon, value: soon }
           - { label: Beta (TestFlight), value: beta }
-        hint: “On the App Store” shows the App Store button, “Beta” the TestFlight button.
+        hint: The App Store button shows whenever the link below is filled; “Coming soon” and “Beta” add a note next to it.
 
       - name: app_store_url
         label: App Store link
