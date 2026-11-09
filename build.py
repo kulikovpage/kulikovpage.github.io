@@ -447,8 +447,9 @@ def project_page(site, project, lang):
     shots = [s for s in shots if s]
     if shots:
         items = "".join(
-            '<li><img src="%s" alt="%s" loading="lazy" decoding="async"></li>'
-            % (esc(s), esc(ui["shot"].format(n=n + 1, total=len(shots)))) for n, s in enumerate(shots))
+            '<li><img src="%s" alt="%s" loading="%s" decoding="async"></li>'
+            % (esc(s), esc(ui["shot"].format(n=n + 1, total=len(shots))), "eager" if n < 3 else "lazy")
+            for n, s in enumerate(shots))
         sections.append("""<section class="shots reveal" aria-label="{label}">
   <ul class="shots-track" tabindex="0">{items}</ul>
   <div class="wrap shots-nav">
