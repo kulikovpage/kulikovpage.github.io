@@ -32,20 +32,13 @@ media_libraries:
           width: 1800
           height: 1800
 
-i18n:
-  structure: single_file
-  locales: [en, uk, ru, pl, es, fr, pt]
-  default_locale: en
-  # A new project starts in English only; other languages are switched on in the ⋮ menu of the editor.
-  initial_locales: default
-
 collections:
   - name: projects
     label: Projects
     label_singular: Project
     description: >-
       Each project gets a card on the home page, its own page at /name/ and a privacy policy at /name/privacy/.
-      Fields left empty in a translation show the English text.
+      The whole site is in English.
     icon: apps
     folder: content/projects
     format: json
@@ -60,7 +53,6 @@ collections:
     preview_path: "{{slug}}/"
     editor:
       preview: false
-    i18n: true
     fields:
       - name: title
         label: App name
@@ -70,7 +62,6 @@ collections:
       - name: subtitle
         label: One-line description
         widget: string
-        i18n: true
         hint: Shown on the card and under the name, about 30–60 characters.
 
       - name: status
@@ -120,44 +111,20 @@ collections:
         label: Cover picture
         widget: image
         required: false
-        i18n: true
-        hint: A wide picture (about 2:1) for the card and the top of the page. Optional. Each language can have its own.
+        hint: A wide picture (about 2:1) for the card and the top of the page. Optional.
 
       - name: screenshots
         label: Screenshots
         widget: image
         multiple: true
         required: false
-        i18n: true
-        hint: Portrait iPhone screenshots, in the order to show. Each language can have its own; empty means the English ones.
+        hint: Portrait iPhone screenshots, in the order to show.
 
       - name: description
         label: About the app
         widget: markdown
         required: false
-        i18n: true
         hint: One or two short paragraphs.
-
-      - name: features
-        label: Features
-        widget: list
-        required: false
-        i18n: true
-        summary: "{{fields.title}}"
-        hint: 3–6 items work best.
-        fields:
-          - { name: title, label: Title, widget: string, i18n: true }
-          - { name: text, label: Text, widget: text, required: false, i18n: true }
-
-      - name: help
-        label: Help & FAQ
-        widget: list
-        required: false
-        i18n: true
-        summary: "{{fields.question}}"
-        fields:
-          - { name: question, label: Question or topic, widget: string, i18n: true }
-          - { name: answer, label: Answer, widget: markdown, i18n: true }
 
       - name: support_email
         label: Support email
@@ -169,7 +136,6 @@ collections:
         label: Privacy policy
         widget: markdown
         required: false
-        i18n: true
         hint: Starts as a template for an app that collects no data. Replace APP NAME and EMAIL, and check every line against what the app really does.
         default: |-
           ## In short

@@ -1,4 +1,4 @@
-// Small helpers for every page: the year, fade-in on scroll, the screenshot arrows. Languages: lang.js.
+// Small helpers for every page: the year, fade-in on scroll, the screenshot arrows.
 (function () {
   var root = document.documentElement;
 
@@ -23,13 +23,6 @@
     } else {
       items.forEach(function (el) { el.classList.add("in"); });
     }
-
-    // Close the language menu when tapping elsewhere.
-    document.addEventListener("click", function (event) {
-      document.querySelectorAll("details.lang-menu[open]").forEach(function (menu) {
-        if (!menu.contains(event.target)) menu.open = false;
-      });
-    });
 
     var track = document.querySelector(".shots-track");
     var buttons = document.querySelectorAll("[data-shots]");
